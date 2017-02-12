@@ -1,4 +1,22 @@
-var mainApp = angular.module('mainApp', ['ionic', 'firebase']);
+var mainApp = angular.module('mainApp', ['ionic', 'ui.router', 'firebase']);
+
+mainApp.config(function($stateProvider, $urlRouterProvider) {
+  
+    $stateProvider
+      .state('main', {
+          url: '/',
+          templateUrl: '01_main.html',
+          controller: 'googleCtrl'
+      })
+      .state('home', {
+          url: '/home',
+          templateUrl: '02_home.html',
+          controller: 'googleCtrl2'
+      });
+  
+    $urlRouterProvider.otherwise("/");
+  
+});
 
 var config = {
     apiKey: "AIzaSyCg3zxVD2ykqAhypLZe7rZ4ZjtfnnpEL_k",
@@ -14,13 +32,14 @@ provider.addScope('https://www.googleapis.com/auth/plus.login');
 
 
 
-mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', 'dataShare',
-     function ($scope, $firebaseAuth, dataShare) {
+mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', 'dataShare', '$location',
+     function ($scope, $firebaseAuth, dataShare, $location) {
          $scope.login = function () {
              firebase.auth().signInWithPopup(provider).then(function (result) {
                  $scope.email = result.user.providerData[0].email;
                  $scope.$apply();
                  dataShare.sendData($scope.email);
+                 $location.path('home');
              }).catch(function (error) {
 
                  var errorCode = error.code;
@@ -33,6 +52,7 @@ mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', 'dataShare',
              });
 
          };
+
 
      }
 ]);
