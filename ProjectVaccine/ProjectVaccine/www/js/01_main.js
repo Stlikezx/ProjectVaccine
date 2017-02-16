@@ -1,22 +1,18 @@
-var mainApp = angular.module('mainApp', ['ionic', 'ui.router', 'firebase']);
+var mainApp = angular.module('mainApp', ['ionic', 'ngRoute', 'firebase']);
 
-mainApp.config(function($stateProvider, $urlRouterProvider) {
-  
-    $stateProvider
-      .state('main', {
-          url: '/',
-          templateUrl: '01_main.html',
-          controller: 'googleCtrl'
-      })
-      .state('home', {
-          url: '/home',
-          templateUrl: '02_home.html',
-          controller: 'googleCtrl2'
-      });
-  
-    $urlRouterProvider.otherwise("/");
-  
-});
+mainApp.config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider) {
+    $routeProvider
+		.when("/", {
+		    templateUrl: "01_main.html",
+		    controller: "googleCtrl"
+		})
+		.when("/home", {
+		    templateUrl: "02_home.html",
+		    controller: "googleCtrl2"
+		})
+    // .otherwise({ redirectTo: '/'})
+    ;
+}]);
 
 var config = {
     apiKey: "AIzaSyCg3zxVD2ykqAhypLZe7rZ4ZjtfnnpEL_k",
@@ -32,53 +28,36 @@ provider.addScope('https://www.googleapis.com/auth/plus.login');
 
 
 
-mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', 'dataShare', '$location',
-     function ($scope, $firebaseAuth, dataShare, $location) {
+mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', '$location',
+     function ($scope, $firebaseAuth, $location) {
          $scope.login = function () {
-             firebase.auth().signInWithPopup(provider).then(function (result) {
-                 $scope.email = result.user.providerData[0].email;
-                 $scope.$apply();
-                 dataShare.sendData($scope.email);
-                 $location.path('home');
-             }).catch(function (error) {
+             
+                 firebase.auth().signInWithPopup(provider).then(function (result) {
+                     var name = result.user.providerData[0].displayName;
+                     var photoUrl = result.user.providerData[0].photoURL
+                     console.log(result.user.providerData[0]);
+                     $scope.$apply();
+                     window.localStorage.setItem("name", name);
+                     window.localStorage.setItem("photoURL", photoUrl);
+                     window.location = "02_home.html"
+                 }).catch(function (error) {
 
-                 var errorCode = error.code;
-                 var errorMessage = error.message;
-                 var email = error.email;
-                 var credential = error.credential;
-                 $scope.error = errorMessage;
-                 $scope.$apply();
-                 dataShare.sendData($scope.error);
-             });
+                     var errorCode = error.code;
+                     var errorMessage = error.message;
+                     var email = error.email;
+                     var credential = error.credential;
+                 });
 
-         };
-
+             };
 
      }
 ]);
 
 
-mainApp.controller('googleCtrl2', ['$scope', 'dataShare',
-    function ($scope, dataShare) {
-        $scope.text = '';
-        $scope.$on('data_shared', function () {
-            var text = dataShare.getData();
-            console.log(text);
-            $scope.text = text;
-            $scope.$apply();
-        });
+mainApp.controller('googleCtrl2', ['$scope',
+    function ($scope) {
+        $scope.name = window.localStorage.getItem("name");
+        $scope.photo = window.localStorage.getItem("photoURL");
     }
 ]);
-mainApp.factory('dataShare', function ($rootScope) {
-    var service = {};
-    service.data = false;
-    service.sendData = function (data) {
-        console.log(data);
-        this.data = data;
-        $rootScope.$broadcast('data_shared');
-    };
-    service.getData = function () {
-        return this.data;
-    };
-    return service;
-});
+
