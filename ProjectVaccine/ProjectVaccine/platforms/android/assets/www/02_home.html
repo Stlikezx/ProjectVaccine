@@ -27,6 +27,7 @@
     <script src="js/01_main.js"></script>
 </head>
 <body ng-app="mainApp">
+
     <ion-side-menus enable-menu-with-back-views="false" ng-controller="googleCtrl2">
         <ion-side-menu-content>
             <ion-nav-bar class="bar-stable">
@@ -34,6 +35,13 @@
                 </ion-nav-back-button>
                 <ion-nav-buttons side="left">
                     <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+                </ion-nav-buttons>
+                <ion-nav-title>
+                    <h4 class="title">HOME</h4>
+                </ion-nav-title>
+                <ion-nav-buttons side="right">
+                    <button class="button button-icon icon ion-ios-plus-outline" menu-toggle="left"></button>
+                    <button class="button button-icon icon ion-android-notifications" menu-toggle="left"></button>
                 </ion-nav-buttons>
             </ion-nav-bar>
             <ion-nav-view name="menuContent"></ion-nav-view>
@@ -56,8 +64,8 @@
                     <ion-item menu-close>
                         Item 2
                     </ion-item>
-                    <ion-item menu-close>
-                        Item 3
+                    <ion-item ng-click="logout()">
+                        Logout
                     </ion-item>
                 </ion-list>
             </ion-content>

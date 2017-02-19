@@ -57,8 +57,7 @@ mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', '$location',
                      var credential = error.credential;
                  });
 
-             };
-
+         };
      }
 ]);
 
@@ -67,5 +66,16 @@ mainApp.controller('googleCtrl2', ['$scope',
     function ($scope) {
         $scope.name = window.localStorage.getItem("name");
         $scope.photo = window.localStorage.getItem("photoURL");
+
+        $scope.logout = function () {
+            firebase.auth().signOut().then(function () {
+
+                window.location = "01_main.html"
+
+            }, function (error) {
+                // An error happened.
+            });
+        };
     }
 ]);
+
