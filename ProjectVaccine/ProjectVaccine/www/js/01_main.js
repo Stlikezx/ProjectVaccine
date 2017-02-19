@@ -1,18 +1,27 @@
 var mainApp = angular.module('mainApp', ['ionic', 'ngRoute', 'firebase']);
 
-mainApp.config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider) {
-    $routeProvider
-		.when("/", {
-		    templateUrl: "01_main.html",
-		    controller: "googleCtrl"
-		})
-		.when("/home", {
-		    templateUrl: "02_home.html",
-		    controller: "googleCtrl2"
-		})
-    // .otherwise({ redirectTo: '/'})
-    ;
-}]);
+mainApp.config(function($stateProvider, $urlRouterProvider) {
+    $stateProvider
+
+      .state('app', {
+          url: "/app",
+          abstract: true,
+          templateUrl: "menu.html"
+      })
+
+      .state('app.home', {
+          url: '/02_home',
+          views: {
+              'menuContent': {
+                  templateUrl: "02_home.html",
+                  controller: 'homeController'
+              }
+          }
+      });
+
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/home');
+});
 
 var config = {
     apiKey: "AIzaSyCg3zxVD2ykqAhypLZe7rZ4ZjtfnnpEL_k",
@@ -60,4 +69,3 @@ mainApp.controller('googleCtrl2', ['$scope',
         $scope.photo = window.localStorage.getItem("photoURL");
     }
 ]);
-
