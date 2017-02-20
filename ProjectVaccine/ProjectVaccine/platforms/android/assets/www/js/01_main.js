@@ -62,8 +62,9 @@ mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', '$location',
 ]);
 
 
-mainApp.controller('googleCtrl2', ['$scope',
-    function ($scope) {
+mainApp.controller('googleCtrl2', ['$scope', '$ionicModal',
+    function ($scope, $ionicModal) {
+
         $scope.name = window.localStorage.getItem("name");
         $scope.photo = window.localStorage.getItem("photoURL");
 
@@ -74,6 +75,32 @@ mainApp.controller('googleCtrl2', ['$scope',
 
             }, function (error) {
                 // An error happened.
+            });
+        };
+
+        // Load the add / change dialog from the given template URL
+        $ionicModal.fromTemplateUrl('03_addProfile.html', function (modal) {
+            $scope.addDialog = modal;
+        }, {
+            scope: $scope,
+            animation: 'slide-in-up'
+        });
+
+
+        $scope.showAddChangeDialog = function (action) {
+            $scope.action = action;
+            $scope.addDialog.show();
+        };
+
+        $scope.leaveAddChangeDialog = function () {
+            // Remove dialog 
+            $scope.addDialog.remove();
+            // Reload modal template to have cleared form
+            $ionicModal.fromTemplateUrl('03_addProfile.html', function (modal) {
+                $scope.addDialog = modal;
+            }, {
+                scope: $scope,
+                animation: 'slide-in-up'
             });
         };
     }
