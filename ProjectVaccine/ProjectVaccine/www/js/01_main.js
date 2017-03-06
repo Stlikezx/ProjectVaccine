@@ -1,4 +1,28 @@
-var mainApp = angular.module('mainApp', ['ionic', 'ngRoute', 'firebase']);
+
+var db=null;
+
+var mainApp = angular.module('mainApp', ['ionic', 'ngRoute', 'firebase', 'ngCordova']);
+
+
+mainApp.run(function($ionicPlatform, $cordovaSQLite) {
+    $ionicPlatform.ready(function() {
+        
+ 
+        if (window.cordova && window.cordova.plugins.Keyboard) {
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.disableScroll(true);
+        }
+        if (window.StatusBar) {
+            StatusBar.styleDefault();
+        }
+
+
+        db = window.openDatabase("Profile.db",1,"demo Sqlite test",2000 );
+        $cordovaSQLite.execute(db,"CREATE TABLE test (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, nickname TEXT, firstname TEXT, lastname TEXT, identified INTEGER, date NUMERIC , gender TEXT, bloodtype TEXT,country TEXT, allergic TEXT, vcdata TEXT)");
+        
+    });
+})
+
 
 mainApp.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -62,8 +86,8 @@ mainApp.controller('googleCtrl', ['$scope', '$firebaseAuth', '$location',
 ]);
 
 
-mainApp.controller('googleCtrl2', ['$scope', '$ionicModal',
-    function ($scope, $ionicModal) {
+mainApp.controller('googleCtrl2', ['$scope', '$ionicModal','$cordovaSQLite',
+    function ($scope, $ionicModal, $cordovaSQLite) {
 
         $scope.name = window.localStorage.getItem("name");
         $scope.photo = window.localStorage.getItem("photoURL");
@@ -103,6 +127,32 @@ mainApp.controller('googleCtrl2', ['$scope', '$ionicModal',
                 animation: 'slide-in-up'
             });
         };
+        $scope.insertProfile = function (nickname, firstname, lastname, identified, date, gender, bloodtype, country, allergy) {
+
+            var query = "INSERT INTO test (nickname,firstname,lastname,identified,date,gender,bloodtype,country,allergic)VALUES(?,?,?,?,?,?,?,?,?)";
+            $cordovaSQLite.execute(db, query, [nickname,firstname,lastname,identified,date, gender, bloodtype, country,allergy]).then(function(res) {
+                console.log("insertId: " + res.insertId);
+            }, function (err) {
+                console.error(err);
+            });
+            this.leaveAddChangeDialog();
+            console.log(nickname);
+            console.log(firstname);
+            console.log(lastname);
+            console.log(identified);
+            console.log(date);
+            console.log(gender);
+            console.log(bloodgroup);
+            console.log(country);
+            console.log(allergy);
+
+        }
     }
 ]);
 
+mainApp.controller('DatabaseCtrl', ['$scope', '$ionicModal','$cordovaSQLite',
+    function ($scope, $ionicModal, $cordovaSQLite) {
+
+
+        }
+     ]);

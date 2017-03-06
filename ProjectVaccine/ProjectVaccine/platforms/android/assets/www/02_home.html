@@ -11,6 +11,7 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="js/ng-cordova.min.js"></script>
     <script src="cordova.js"></script>
 
     <!-- AngularFire -->
@@ -44,7 +45,8 @@
                     <button class="button button-icon icon ion-android-notifications" menu-toggle="left"></button>
                 </ion-nav-buttons>
             </ion-nav-bar>
-            <ion-nav-view name="menuContent"></ion-nav-view>
+            <ion-nav-view name="menuContent">
+            </ion-nav-view>
         </ion-side-menu-content>
         <ion-side-menu side="left">
             <ion-header-bar class="bar-profile">
@@ -71,6 +73,5 @@
             </ion-content>
         </ion-side-menu>
     </ion-side-menus>
-
 </body>
 </html>

@@ -11,6 +11,7 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="js/ng-cordova.min.js"></script>
     <script src="cordova.js"></script>
 
     <!-- AngularFire -->
@@ -36,29 +37,29 @@
             <div class="list">
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Nick Name</span>
-                    <input type="text" placeholder="john@suhr.com">
+                    <input type="text" placeholder="john@suhr.com" ng-model="nickname">
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">First Name</span>
-                    <input type="text" placeholder="John">
+                    <input type="text" placeholder="John" ng-model="firstname">
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Last Name</span>
-                    <input type="text" placeholder="Suhr">
+                    <input type="text" placeholder="Suhr" ng-model="lastname">
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Identification Number</span>
-                    <input type="number" placeholder="x-xxxx-xxxxx-xx-x">
+                    <input type="number" placeholder="x-xxxx-xxxxx-xx-x" ng-model="identified">
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Born</span>
-                    <input type="date">
+                    <input type="date" ng-model="date">
                 </label>
                 <label class="item item-input item-select">
                     <div class="input-label">
-                        Sex
+                        Gender
                     </div>
-                    <select>
+                    <select ng-model="gender">
                         <option selected>Male</option>
                         <option>Female</option>
                     </select>
@@ -67,7 +68,7 @@
                     <div class="input-label">
                         Blood Group
                     </div>
-                    <select>
+                    <select ng-model="bloodytpe">
                         <option selected>O</option>
                         <option>A</option>
                         <option>B</option>
@@ -78,7 +79,7 @@
                     <div class="input-label">
                         Country
                     </div>
-                    <select>
+                    <select ng-model="country">
                         <option selected>Thailand</option>
                         <option>US</option>
                         <option>England</option>
@@ -87,11 +88,11 @@
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Drug Allergy</span>
-                    <input type="text" placeholder="Drug">
+                    <input type="text" placeholder="Drug" ng-model="allergy">
                 </label>
 
-                <button class="button button-block button-positive">
-                    Add
+                <button class="button button-block button-positive" ng-click="insertProfile(nickname, firstname, lastname, identified, date, gender,bloodgroup,country,allergy)">
+                    Done
                 </button>
             </div>
 </div>
