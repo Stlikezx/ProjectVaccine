@@ -135,6 +135,7 @@ mainApp.controller('googleCtrl2', ['$scope', '$ionicModal','$cordovaSQLite',
             }, function (err) {
                 console.error(err);
             });
+            $scope.loadDataDisplay();
             this.leaveAddChangeDialog();
             console.log(nickname);
             console.log(firstname);
@@ -142,17 +143,34 @@ mainApp.controller('googleCtrl2', ['$scope', '$ionicModal','$cordovaSQLite',
             console.log(identified);
             console.log(date);
             console.log(gender);
-            console.log(bloodgroup);
+            console.log(bloodtype);
             console.log(country);
             console.log(allergy);
+
+        }
+
+        $scope.loadDataDisplay = function(){
+            $scope.alldata = [];
+            $cordovaSQLite.execute(db, "SELECT * FROM test").then(function (result) {
+                if (result.rows.length) {
+                    for (var i = 0; i < result.rows.length; i++) {
+                        $scope.alldata.push(result.rows.item(i));
+                    }
+                } else {
+                    console.log("no data found");   
+                }
+            }, function (error) {
+                console.log("error"+err);
+            });
 
         }
     }
 ]);
 
-mainApp.controller('DatabaseCtrl', ['$scope', '$ionicModal','$cordovaSQLite',
-    function ($scope, $ionicModal, $cordovaSQLite) {
-
-
+mainApp.controller('itemListCtrl', ['$scope', '$ionicModal',
+    function ($scope, $ionicModal) {
+        $scope.shouldShowDelete = false;
+        $scope.shouldShowReorder = false;
+        $scope.listCanSwipe = true
         }
      ]);
